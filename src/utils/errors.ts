@@ -1,7 +1,7 @@
 import HTTP_STATUS from "@/constant/HttpStatus";
 import { Response } from "express";
 
-exports.sendError = (res: Response, error: Error) => {
+const sendError = (res: Response, error: Error) => {
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
         success: false,
         status: 500,
@@ -9,7 +9,7 @@ exports.sendError = (res: Response, error: Error) => {
     });
 };
 
-exports.sendForbidden = (res: Response, msg: string) => {
+const sendForbidden = (res: Response, msg: string) => {
     res.status(HTTP_STATUS.FORBIDDEN).json({
         success: false,
         status: 403,
@@ -17,7 +17,7 @@ exports.sendForbidden = (res: Response, msg: string) => {
     });
 };
 
-exports.sendWarning = (res: Response, msg: string) => {
+const sendWarning = (res: Response, msg: string) => {
     res.status(HTTP_STATUS.BAD_REQUEST).json({
         success: false,
         status: 400,
@@ -25,7 +25,7 @@ exports.sendWarning = (res: Response, msg: string) => {
     });
 };
 
-exports.sendUnauthenticated = (res: Response) => {
+const sendUnauthenticated = (res: Response) => {
     res.status(HTTP_STATUS.UNAUTHORIZED).json({
         success: false,
         status: 401,
@@ -33,7 +33,7 @@ exports.sendUnauthenticated = (res: Response) => {
     });
 };
 
-exports.sendNotFound = (res: Response, msg: String) => {
+const sendNotFound = (res: Response, msg: String) => {
     res.status(HTTP_STATUS.NOT_FOUND).json({
         success: false,
         status: 404,
@@ -41,10 +41,20 @@ exports.sendNotFound = (res: Response, msg: String) => {
     });
 };
 
-exports.sendConflict = (res: Response, msg: string) => {
+const sendConflict = (res: Response, msg: string) => {
     res.status(HTTP_STATUS.CONFLICT).json({
         success: false,
         status: 409,
         message: msg,
     });
 };
+
+export default {
+    sendConflict,
+    sendError,
+    sendForbidden,
+    sendNotFound,
+    sendWarning,
+    sendUnauthenticated,
+
+}

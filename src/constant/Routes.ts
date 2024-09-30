@@ -7,13 +7,10 @@ const ROUTE = {
     FORGOT_PASSWORD: '/forgot-password',
     GENERATE_ACCESSTOKEN: '/accessToken-generate',
 
+    INDEX: '/',
+    BY_ID: '/:id',
     COURSE: '/courses',
-    COURSE_BY_ID: '/courses/:id',
-
     LESSONS: '/lessons',
-    LESSONS_BY_ID: "/lessons/:id",
-
     REVIEW: '/reviews',
-    REVIEW_BY_ID: 'reviews/:id'
 }
 export default ROUTE

@@ -18,6 +18,7 @@ app.use(cors(corsOptions))
 app.use(express.json())
 mongo.connect()
 
+
 router(app)
 
 app.listen(appConfig.PORT, () => {

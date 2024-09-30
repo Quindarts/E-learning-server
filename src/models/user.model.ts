@@ -7,6 +7,7 @@ const userSchema = new Schema(
         firstName: { type: String, required: false },
         lastName: { type: String, required: false },
         email: { type: String, required: true, unique: true },
+        password: { type: String, required: true, },
         phone: { type: String, required: false, default: '' },
         gender: { type: String, enum: Object.values(GENDER), required: false, default: GENDER.MALE },
         dateOfBirth: {
@@ -63,4 +64,4 @@ const userSchema = new Schema(
         ],
     },
 )
-module.exports = mongoose.model('User', userSchema)
+export default mongoose.model('User', userSchema)

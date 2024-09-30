@@ -18,4 +18,4 @@ const courseSchema = new Schema({
     reviews: ['reviewSchema'],
 });
 
-module.exports = mongoose.model('Course', courseSchema)
+export default mongoose.model('Course', courseSchema)
