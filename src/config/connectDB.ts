@@ -1,8 +1,8 @@
-import appConfig from "@/config";
+import appConfig from ".";
 import mongoose from "mongoose";
 
 abstract class ConnectionDB {
-    constructor() {}
+    constructor() { }
     protected async connect() { }
 }
 

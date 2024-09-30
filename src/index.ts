@@ -1,7 +1,7 @@
 import 'module-alias/register'
 import express from 'express'
-import appConfig from '@/config'
-import ConnectMongoAtlas from '@/config/connectDB'
+import appConfig from './config'
+import ConnectMongoAtlas from './config/connectDB'
 import helmet from 'helmet'
 import cors from "cors"
 import router from './routes'
