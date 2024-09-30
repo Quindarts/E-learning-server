@@ -1,3 +1,4 @@
+import 'module-alias/register';
 import { Express } from 'express';
 import auth from './auth.route';
 import ROUTE from "@/constant/Routes";
