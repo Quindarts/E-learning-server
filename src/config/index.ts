@@ -3,7 +3,6 @@ dotenv.config()
 
 const appConfig = {
   PORT: process.env.PORT || 5001,
-  port: process.env.PORT || 3000,
   clientURL: process.env.CLIENT_URL || 'http://localhost:3000',
 
   db: {
