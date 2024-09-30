@@ -1,6 +1,6 @@
 const API_VERSION = '/api/v1'
 const ROUTE = {
-    AUTH: `${API_VERSION}/auth`,
+    AUTH: `/auth`,
     LOGIN: '/login',
     REGISTER: '/register',
     PROFILE: '/profile',
@@ -10,7 +10,7 @@ const ROUTE = {
 
     INDEX: '/',
     BY_ID: '/:id',
-    COURSE: `${API_VERSION}/courses`,
+    COURSE: `/courses`,
     LESSONS: '/lessons',
     REVIEW: '/reviews',
 }
