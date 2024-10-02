@@ -1,28 +1,48 @@
 import jwt from "@/helper/jwt";
 import { Request, Response, NextFunction } from "express";
+import Error from "@/utils/errors"; // Assuming a custom error utility is available
 
 const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers["authorization"];
+
+  // Check if token is present
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    return Error.sendUnauthenticated(res);
   }
+
   try {
-    const verified = jwt.verifyToken("access", token.split(" ")[1]);
+    const tokenParts = token.split(" ");
+
+    // Check if token is valid (has "Bearer" part)
+    if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
+      return Error.sendUnauthenticated(res);
+    }
+
+    // Verify token
+    const verified = jwt.verifyToken("access", tokenParts[1]);
+
+    // Check if token is expired
     if (verified.expired) {
-      return res.status(403).json({ message: "Token expired" });
+      return Error.sendForbidden(res, "Token expired");
     }
+
+    // Check if payload is valid
     if (
-      verified.payload &&
-      typeof verified.payload !== "string" &&
-      "data" in verified.payload
+      !verified.payload ||
+      typeof verified.payload === "string" ||
+      !("data" in verified.payload)
     ) {
-      req.body.userId = verified.payload.data.id; // Attach user ID to request
-    } else {
-      return res.status(401).json({ message: "Invalid token payload" });
+      return Error.sendUnauthenticated(res);
     }
-    next(); // Proceed to the next middleware or route
+
+    // Attach user ID to the request body
+    req.body.userId = verified.payload.data.id;
+
+    // Move to the next middleware or route
+    next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+    // Handle token verification errors
+    return Error.sendUnauthenticated(res);
   }
 };
 
