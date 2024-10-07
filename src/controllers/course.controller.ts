@@ -107,6 +107,7 @@ export const removeCourse = async (req: Request, res: Response) => {
 };
 
 // filter courses
+//http://example.com/api/courses?category=a&category=b
 interface CourseFilterQuery {
   offset?: string;
   limit?: string;
@@ -145,13 +146,14 @@ export const filterCourse = async (req: Request, res: Response) => {
 
   // Filter theo từ khóa (tìm trong tên hoặc mô tả)
   if (keywords && sortField) {
-    query[sortField] = { $regex: keywords, $options: "i" };
+    query[sortField] = { $regex: keywords, $options: "i" }; // Tìm kiếm không phân biệt hoa thường
   }
 
   // Filter theo danh mục (category)
-  // if (category) {
-  //   query["category"] = category;
-  // }
+  if (category) {
+    const categories = Array.isArray(category) ? category : [category];
+    query["category"] = { $in: categories };
+  }
 
   // Filter theo tác giả (author)
   // if (author) {
@@ -171,7 +173,7 @@ export const filterCourse = async (req: Request, res: Response) => {
       .sort({
         ...(sortField && sortType ? { [sortField]: sortType } : {}),
       })
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo mới nhất
       .lean();
 
     // Tính tổng số trang
