@@ -11,46 +11,35 @@ export const addCourseToCart = async (req: Request, res: Response) => {
     const userId = req.body.userId; // Extracted from the middleware
 
     // Find the user by ID
-    const user = await User.findById(userId).populate('carts.items.course');
+    const user = await User.findById(userId).lean();
     if (!user) {
       return Error.sendNotFound(res, "User not found");
     }
 
     // Find the course by ID
-    const course = await Course.findById(courseId);
+    const course = await Course.findById(courseId).lean();
     if (!course) {
       return Error.sendNotFound(res, "Course not found");
     }
 
-    // Check if the course is already in the cart
-    if (!user.carts) {
-      return Error.sendNotFound(res, "User cart not found");
+    // Find user by ID and add course to cart if not already in it
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId, "carts.items.course": { $ne: courseId } }, // Find user where course is not already in cart
+      {
+        $push: { "carts.items": { course: courseId, quantity: 1 } }, // Add course to cart
+        $inc: { "carts.totalPrice": course.price }, // Increase total price
+      },
+      { new: true } // Return the updated user
+    ).populate("carts.items.course");
+
+    if (!updatedUser) {
+      return Error.sendConflict(res, "Course already in cart");
     }
-
-    const courseInCart = user.carts.items.find(
-      (item: any) => item.course.toString() === courseId
-    );
-
-    if (courseInCart) {
-      return res.status(HTTP_STATUS.CONFLICT).json({
-        success: false,
-        message: "Course already in cart",
-      });
-    }
-
-    // Add course to the user's cart
-    user.carts.items.push({
-      course: courseId,
-      quantity: 1,
-    });
-    user.carts.totalPrice += course.price;
-
-    await user.save();
 
     return res.status(HTTP_STATUS.OK).json({
       success: true,
       message: "Course added to cart",
-      cart: user,
+      cart: updatedUser.carts,
     });
   } catch (error: any) {
     return Error.sendError(res, error);
