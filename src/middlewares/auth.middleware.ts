@@ -12,20 +12,16 @@ const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const tokenParts = token.split(" ");
-    // Check if token is valid (has "Bearer" part)
     if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
       return Error.sendUnauthenticated(res);
     }
 
-    // Verify token
     const verified = jwt.verifyToken("access", tokenParts[1]);
 
-    // Check if token is expired
     if (verified.expired) {
       return Error.sendForbidden(res, "Token expired");
     }
 
-    // Check if payload is valid
     if (
       !verified.payload ||
       typeof verified.payload === "string" ||
@@ -34,13 +30,10 @@ const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
       return Error.sendUnauthenticated(res);
     }
 
-    // Attach user ID to the request body
     req.body.userId = verified.payload.data.id;
 
-    // Move to the next middleware or route
     next();
   } catch (error) {
-    // Handle token verification errors
     return Error.sendUnauthenticated(res);
   }
 };

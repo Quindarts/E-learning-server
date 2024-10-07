@@ -5,6 +5,6 @@ import express from "express";
 
 const cart = express.Router();
 
-cart.put(ROUTE.ADD_TO_CART, verifyAuth, addCourseToCart);
+cart.post(ROUTE.COURSE, verifyAuth, addCourseToCart);
 
 export default cart;
