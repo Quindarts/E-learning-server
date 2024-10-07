@@ -11,7 +11,7 @@ export const addCourseToCart = async (req: Request, res: Response) => {
     const userId = req.body.userId; // Extracted from the middleware
 
     // Find the user by ID
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate('carts.items.course');
     if (!user) {
       return Error.sendNotFound(res, "User not found");
     }
@@ -50,7 +50,7 @@ export const addCourseToCart = async (req: Request, res: Response) => {
     return res.status(HTTP_STATUS.OK).json({
       success: true,
       message: "Course added to cart",
-      cart: user.carts,
+      cart: user,
     });
   } catch (error: any) {
     return Error.sendError(res, error);

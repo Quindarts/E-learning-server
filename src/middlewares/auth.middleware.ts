@@ -7,19 +7,15 @@ const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ message: "No token provided" });
   }
   try {
-    const verified = jwt.verifyToken("access", token.split(" ")[1]);
+    const verified: any = jwt.verifyToken("access", token.split(" ")[1]);
     if (verified.expired) {
       return res.status(403).json({ message: "Token expired" });
     }
     if (
-      verified.payload &&
-      typeof verified.payload !== "string" &&
-      "data" in verified.payload
-    ) {
-      req.body.userId = verified.payload.data.id; // Attach user ID to request
-    } else {
-      return res.status(401).json({ message: "Invalid token payload" });
-    }
+      typeof verified !== 'object'
+    ) return res.status(401).json({ message: "Invalid token payload" });
+    req.body.userId = verified.payload.data.id;
+
     next(); // Proceed to the next middleware or route
   } catch (error) {
     return res.status(401).json({ message: "Invalid token" });
