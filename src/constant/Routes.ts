@@ -10,7 +10,6 @@ const ROUTE = {
 
   CART: "/cart",
   ADD_TO_CART: "/add-to-cart",
-
   INDEX: "/",
   BY_ID: "/:id",
   COURSE: `/courses`,

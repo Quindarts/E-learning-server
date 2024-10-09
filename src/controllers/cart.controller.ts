@@ -6,30 +6,25 @@ import Error from "@/utils/errors";
 
 export const addCourseToCart = async (req: Request, res: Response) => {
   try {
-    const { courseId } = req.body; // The course ID sent in the request body
-    console.log(req.body);
-    const userId = req.body.userId; // Extracted from the middleware
+    const { courseId } = req.body;
+    const userId = req.body.userId;
 
-    // Find the user by ID
     const user = await User.findById(userId).lean();
     if (!user) {
       return Error.sendNotFound(res, "User not found");
     }
-
-    // Find the course by ID
     const course = await Course.findById(courseId).lean();
     if (!course) {
       return Error.sendNotFound(res, "Course not found");
     }
 
-    // Find user by ID and add course to cart if not already in it
     const updatedUser = await User.findOneAndUpdate(
-      { _id: userId, "carts.items.course": { $ne: courseId } }, // Find user where course is not already in cart
+      { _id: userId, "carts.items.course": { $ne: courseId } },
       {
-        $push: { "carts.items": { course: courseId, quantity: 1 } }, // Add course to cart
-        $inc: { "carts.totalPrice": course.price }, // Increase total price
+        $push: { "carts.items": { course: courseId, quantity: 1 } },
+        $inc: { "carts.totalPrice": course.price },
       },
-      { new: true } // Return the updated user
+      { new: true }
     ).populate("carts.items.course");
 
     if (!updatedUser) {
@@ -45,3 +40,4 @@ export const addCourseToCart = async (req: Request, res: Response) => {
     return Error.sendError(res, error);
   }
 };
+
