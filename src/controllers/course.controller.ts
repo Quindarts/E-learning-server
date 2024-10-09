@@ -198,3 +198,20 @@ export const filterCourse = async (req: Request, res: Response) => {
     });
   }
 };
+
+// Get all categories
+export const getCategories = async (req: Request, res: Response) => {
+  try {
+    // Use MongoDB's distinct method to get unique categories
+    const categories = await Course.distinct("category");
+    return res.status(HTTP_STATUS.OK).json({
+      success: true,
+      categories,
+    });
+  } catch (error: any) {
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: "Failed to fetch categories",
+    });
+  }
+};

@@ -15,6 +15,7 @@ const ROUTE = {
   BY_ID: "/:id",
   COURSE: `/courses`,
   COURSE_FILTER: "/filter",
+  CATEGORY: "/categories",
   LESSONS: "/lessons",
   REVIEW: "/reviews",
 };
