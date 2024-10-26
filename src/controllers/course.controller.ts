@@ -156,15 +156,8 @@ export const filterCourse = async (req: Request, res: Response) => {
   }
 
   // Filter theo tác giả (author)
-  // if (author) {
-  //   query["author"] = author;
-  // }
-  console.log(
-    "🚀 ~ file: course.controller.ts ~ line 144 ~ filterCourse ~ query",
-    query
-  );
+
   try {
-    // Lấy danh sách courses theo query và phân trang, sắp xếp
     const courses = await Course.find(query)
       .limit(limit ? parseInt(limit) : 10)
       .skip(
@@ -173,7 +166,7 @@ export const filterCourse = async (req: Request, res: Response) => {
       .sort({
         ...(sortField && sortType ? { [sortField]: sortType } : {}),
       })
-      .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo mới nhất
+      .sort({ createdAt: -1 })
       .lean();
 
     // Tính tổng số trang
