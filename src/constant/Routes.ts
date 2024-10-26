@@ -17,5 +17,8 @@ const ROUTE = {
   CATEGORY: "/categories",
   LESSONS: "/lessons",
   REVIEW: "/reviews",
+
+  ORDER: "/orders",
+  PAYMENT: "/payment",
 };
 export default ROUTE;
