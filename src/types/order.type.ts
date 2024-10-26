@@ -5,6 +5,9 @@ enum OrderStatus {
   PAID = 'PAID',
   UNPAID = 'UNPAID',
   INIT = 'INIT',
+  SHIPPING = 'SHIPPING',
+  CANCELLED = 'CANCELLED',
+  DONE = 'DONE',
 }
 interface Order {
   _id: string;
@@ -15,4 +18,4 @@ interface Order {
   billingDetails: BillingDetail;
 }
 
-export { Order };
+export { Order, OrderStatus };

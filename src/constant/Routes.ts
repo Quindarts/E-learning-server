@@ -16,5 +16,8 @@ const ROUTE = {
   COURSE_FILTER: "/filter",
   LESSONS: "/lessons",
   REVIEW: "/reviews",
+
+  ORDER: "/orders",
+  PAYMENT: "/payment",
 };
 export default ROUTE;
