@@ -3,7 +3,7 @@ interface IUser {
   email: string;
   firstName: string;
   lastName: string;
-  gender: 'M' | 'F' | 'O';
+  gender: "M" | "F" | "O";
 }
 
 interface IAuth {

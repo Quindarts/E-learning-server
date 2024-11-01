@@ -17,20 +17,17 @@ export const addCourseToCart = async (req: Request, res: Response) => {
     if (!course) {
       return Error.sendNotFound(res, "Course not found");
     }
-
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId, "carts.items.course": { $ne: courseId } },
       {
         $push: { "carts.items": { course: courseId, quantity: 1 } },
         $inc: { "carts.totalPrice": course.price },
       },
-      { new: true }
+      { new: true },
     ).populate("carts.items.course");
-
     if (!updatedUser) {
       return Error.sendConflict(res, "Course already in cart");
     }
-
     return res.status(HTTP_STATUS.OK).json({
       success: true,
       message: "Course added to cart",
@@ -40,4 +37,3 @@ export const addCourseToCart = async (req: Request, res: Response) => {
     return Error.sendError(res, error);
   }
 };
-

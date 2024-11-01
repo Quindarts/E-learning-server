@@ -1,6 +1,6 @@
-import { Lesson } from './lesson.type';
-import { Order } from './order.type';
-import { Review } from './review.type';
+import { Lesson } from "./lesson.type";
+import { Order } from "./order.type";
+import { Review } from "./review.type";
 
 interface Course {
   _id: string;

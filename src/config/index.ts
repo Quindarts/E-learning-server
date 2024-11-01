@@ -1,9 +1,9 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
 const appConfig = {
   PORT: process.env.PORT || 5001,
-  clientURL: process.env.CLIENT_URL || 'http://localhost:3000',
+  clientURL: process.env.CLIENT_URL || "http://localhost:3000",
 
   db: {
     userName: process.env.CLOUD_DB_USERNAME,
@@ -20,6 +20,6 @@ const appConfig = {
   vnp_Url: process.env.VNP_URL,
   vnp_Api: process.env.VNP_API,
   vnp_ReturnUrl: process.env.VNP_RETURN_URL,
-}
+};
 
-export default appConfig
+export default appConfig;

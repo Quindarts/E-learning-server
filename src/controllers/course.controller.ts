@@ -161,7 +161,7 @@ export const filterCourse = async (req: Request, res: Response) => {
     const courses = await Course.find(query)
       .limit(limit ? parseInt(limit) : 10)
       .skip(
-        offset ? (parseInt(offset) - 1) * (limit ? parseInt(limit) : 10) : 0
+        offset ? (parseInt(offset) - 1) * (limit ? parseInt(limit) : 10) : 0,
       )
       .sort({
         ...(sortField && sortType ? { [sortField]: sortType } : {}),

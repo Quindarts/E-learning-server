@@ -9,6 +9,7 @@ import {
   getCategories,
 } from "@/controllers/course.controller";
 const course = express.Router();
+
 course.get(ROUTE.COURSE_FILTER, filterCourse);
 course.get(ROUTE.CATEGORY, getCategories);
 course.get(ROUTE.BY_ID, getCourseById);

@@ -1,8 +1,9 @@
 import express from "express";
 import ROUTE from "@/constant/Routes";
-
-import { createPayment, getPaymentSuccess } from "@/controllers/payment.controller";
-import exp from "constants";
+import {
+  createPayment,
+  getPaymentSuccess,
+} from "@/controllers/payment.controller";
 
 const payment = express.Router();
 

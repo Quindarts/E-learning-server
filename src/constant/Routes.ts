@@ -19,6 +19,7 @@ const ROUTE = {
   REVIEW: "/reviews",
 
   ORDER: "/orders",
+  SAVING_ORDER: "/saving-order",
   PAYMENT: "/payment",
 };
 export default ROUTE;

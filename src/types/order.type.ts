@@ -1,13 +1,13 @@
-import { BillingDetail } from './billingDetail.type';
-import { Cart } from './cart.type';
-import { Coupon } from './coupon.type';
+import { BillingDetail } from "./billingDetail.type";
+import { Cart } from "./cart.type";
+import { Coupon } from "./coupon.type";
 enum OrderStatus {
-  PAID = 'PAID',
-  UNPAID = 'UNPAID',
-  INIT = 'INIT',
-  SHIPPING = 'SHIPPING',
-  CANCELLED = 'CANCELLED',
-  DONE = 'DONE',
+  PAID = "PAID",
+  UNPAID = "UNPAID",
+  INIT = "INIT",
+  SHIPPING = "SHIPPING",
+  CANCELLED = "CANCELLED",
+  DONE = "DONE",
 }
 interface Order {
   _id: string;
