@@ -9,6 +9,7 @@ const ROUTE = {
   GENERATE_ACCESSTOKEN: "/accessToken-generate",
 
   CART: "/cart",
+  COUPON: '/coupons',
   ADD_TO_CART: "/add-to-cart",
   INDEX: "/",
   BY_ID: "/:id",

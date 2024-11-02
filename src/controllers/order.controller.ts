@@ -60,15 +60,13 @@ const savingOrder = async (req: Request, res: Response) => {
         const { user } = req.body;
         const { couponCode } = req.body;
         const carts = user.carts;
-        const course_id = carts.items[0].course
         const my_coupon = user.coupons.find((voucher: { code: string, discount: number }) => voucher.code.includes(couponCode))
         if (!my_coupon) {
             return Error.sendNotFound(res, 'Your coupon not valid.')
         }
-
         const newOrder = await Order.create({
             user: user,
-            amount: getTotalPrice(carts.totalPrice, my_coupon.discount),
+            amount: couponCode ? getTotalPrice(carts.totalPrice, my_coupon.discount) : carts.totalPrice,
             status: ORDER_STATUS.COMPLETED,
         });
         const updateUser = await User.findOneAndUpdate(
@@ -89,7 +87,7 @@ const savingOrder = async (req: Request, res: Response) => {
             {
                 new: true,
             },
-        )
+        ).populate('currentCourses.course')
         if (!updateUser) {
             return Error.sendNotFound(res, 'Try again, payment failed')
         }
@@ -104,7 +102,7 @@ const savingOrder = async (req: Request, res: Response) => {
         });
     } catch (error: any) {
         console.log("🚀 ~ savingOrder ~ error:", error);
-        Error.sendError(res, error);
+        return Error.sendError(res, error);
     }
 };
 export { createOrder, changeStatusOfOrder, savingOrder };

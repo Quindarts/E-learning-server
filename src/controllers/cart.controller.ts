@@ -37,3 +37,25 @@ export const addCourseToCart = async (req: Request, res: Response) => {
     return Error.sendError(res, error);
   }
 };
+
+export const clearCart = async (req: Request, res: Response) => {
+  try {
+    const { user } = req.body;
+    await User.findOneAndUpdate({
+      id: user.id,
+    }, {
+      $set: {
+        "carts.items": [],
+        "carts.totalPrice": 0,
+      }
+    })
+    return res.status(HTTP_STATUS.CREATED).json({
+      status: HTTP_STATUS.CREATED,
+      message: 'Clear cart success',
+      success: true,
+    })
+  } catch (error: any) {
+    console.log("🚀 ~ clearCart ~ error:", error)
+    Error.sendError(res, error)
+  }
+}
