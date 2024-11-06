@@ -1,6 +1,6 @@
 import { Address } from "./address.type";
 import { Cart } from "./cart.type";
-import { Gender } from "./enum";
+import { GENDER } from "./enum";
 import { Notify } from "./notify.type";
 import { Role } from "./role.type";
 
@@ -9,8 +9,9 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
+  avatar: string;
   phone: string;
-  gender: Gender;
+  gender: GENDER;
   status: boolean;
   googleId: string;
   roles: Role;

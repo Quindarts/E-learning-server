@@ -2,7 +2,6 @@ import User from "@/models/user.model";
 import jwt from "@/helper/jwt";
 import { Request, Response, NextFunction } from "express";
 import Error from "@/utils/errors";
-import { triggerAsyncId } from "async_hooks";
 const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers["authorization"];
 
@@ -64,9 +63,7 @@ const isUser = async (req: Request, res: Response, next: NextFunction) => {
     ) {
       return Error.sendUnauthenticated(res);
     }
-
     const user = await User.findById(verified.payload.data.id).lean();
-    console.log("🚀 ~ isUser ~ user:", user);
     req.body.user = user;
     next();
   } catch (error) {

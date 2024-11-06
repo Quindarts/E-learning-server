@@ -60,15 +60,24 @@ const savingOrder = async (req: Request, res: Response) => {
         const { user } = req.body;
         const { couponCode } = req.body;
         const carts = user.carts;
-        const my_coupon = user.coupons.find((voucher: { code: string, discount: number }) => voucher.code.includes(couponCode))
-        if (!my_coupon) {
-            return Error.sendNotFound(res, 'Your coupon not valid.')
+        let total = carts.totalPrice
+        const isUseCoupon = couponCode.trim() !== ''
+        let my_coupon
+
+        if (isUseCoupon === true) {
+            my_coupon = user.coupons.find((voucher: { code: string, discount: number }) => voucher.code.includes(couponCode))
+            if (!my_coupon) {
+                return Error.sendNotFound(res, 'Your coupon not valid.')
+            }
+            total = getTotalPrice(carts.totalPrice, my_coupon.discount)
         }
+
         const newOrder = await Order.create({
             user: user,
-            amount: couponCode ? getTotalPrice(carts.totalPrice, my_coupon.discount) : carts.totalPrice,
+            amount: total,
             status: ORDER_STATUS.COMPLETED,
         });
+
         const updateUser = await User.findOneAndUpdate(
             {
                 id: user.id,
@@ -78,7 +87,7 @@ const savingOrder = async (req: Request, res: Response) => {
                     "carts.items": [],
                     "carts.totalPrice": 0,
                 },
-                $pull: { coupons: { code: my_coupon.code } },
+                $pull: isUseCoupon ? { coupons: { code: my_coupon.code } } : {},
                 $push: {
                     currentCourses: { course: carts.items[0].course, progress: 0, time: new Date() },
                     notifies: { message: 'Congratulations! Your payment was successful. 🎉', date: new Date(), read: false }

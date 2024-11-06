@@ -15,6 +15,18 @@ interface RequestBody {
   endDate: Date;
   lessons?: LessonType[];
 }
+
+interface CourseFilterQuery {
+  offset?: string;
+  limit?: string;
+  sortField?: string;
+  sortType?: "asc" | "desc";
+  category?: string;
+  author?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  keywords?: string;
+}
 export const createCourse = async (req: Request, res: Response) => {
   const {
     name,
@@ -58,7 +70,7 @@ export const createCourse = async (req: Request, res: Response) => {
 export const getCourseById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const course = await Course.findById(id).lean();
+    const course = await Course.findById(id).populate('reviews.user','name').lean();
     if (!course) {
       return Error.sendNotFound(res, "No course found");
     }
@@ -106,19 +118,6 @@ export const removeCourse = async (req: Request, res: Response) => {
   }
 };
 
-// filter courses
-//http://example.com/api/courses?category=a&category=b
-interface CourseFilterQuery {
-  offset?: string;
-  limit?: string;
-  sortField?: string;
-  sortType?: "asc" | "desc";
-  category?: string;
-  author?: string;
-  minPrice?: string;
-  maxPrice?: string;
-  keywords?: string;
-}
 
 export const filterCourse = async (req: Request, res: Response) => {
   const {
@@ -143,19 +142,13 @@ export const filterCourse = async (req: Request, res: Response) => {
       ...(maxPrice ? { $lte: parseInt(maxPrice) } : {}),
     };
   }
-
-  // Filter theo từ khóa (tìm trong tên hoặc mô tả)
   if (keywords && sortField) {
     query[sortField] = { $regex: keywords, $options: "i" }; // Tìm kiếm không phân biệt hoa thường
   }
-
-  // Filter theo danh mục (category)
   if (category) {
     const categories = Array.isArray(category) ? category : [category];
     query["category"] = { $in: categories };
   }
-
-  // Filter theo tác giả (author)
 
   try {
     const courses = await Course.find(query)
@@ -168,8 +161,6 @@ export const filterCourse = async (req: Request, res: Response) => {
       })
       .sort({ createdAt: -1 })
       .lean();
-
-    // Tính tổng số trang
     const totalCourses = await Course.countDocuments(query);
     const totalPages = Math.ceil(totalCourses / (limit ? parseInt(limit) : 10));
     return res.status(HTTP_STATUS.OK).json({
@@ -191,11 +182,9 @@ export const filterCourse = async (req: Request, res: Response) => {
     });
   }
 };
-
 // Get all categories
 export const getCategories = async (req: Request, res: Response) => {
   try {
-    // Use MongoDB's distinct method to get unique categories
     const categories = await Course.distinct("category");
     return res.status(HTTP_STATUS.OK).json({
       success: true,

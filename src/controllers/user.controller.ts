@@ -16,7 +16,6 @@ export const get = async (req: Request, res: Response) => {
       user,
     });
   } catch (error: any) {
-    console.log("🚀 ~ get ~ error:", error);
     Error.sendError(res, error);
   }
 };
