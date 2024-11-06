@@ -14,10 +14,10 @@ const ROUTE = {
   INDEX: "/",
   BY_ID: "/:id",
   COURSE: `/courses`,
+  REVIEW: "/:id/reviews",
   COURSE_FILTER: "/filter",
   CATEGORY: "/categories",
   LESSONS: "/lessons",
-  REVIEW: "/reviews",
 
   ORDER: "/orders",
   SAVING_ORDER: "/saving-order",

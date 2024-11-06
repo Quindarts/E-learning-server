@@ -1,11 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const reviewSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: false },
-  name: { type: String, required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User" },
   comment: { type: String, required: true },
   rating: { type: Number, min: 1, max: 5, required: true },
   date: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Review", reviewSchema);
+export default mongoose.model("Review", reviewSchema);

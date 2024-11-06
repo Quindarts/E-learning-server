@@ -55,16 +55,6 @@ const isValidCoupon = async (coupon: string) => {
 
 const generateVNPayUrl = async (req: Request, res: Response) => {
   const { orderId, paymentMethod, bankCode, couponCode } = req.body;
-  // const order = await Order.findById(orderId).lean()
-  // if (!order) {
-  //     return res.status(HTTP_STATUS.NOT_FOUND).json({
-  //         success: false,
-  //         message: 'Order not found',
-  //         code: '97',
-  //     })
-  // }
-  // console.log("🚀 ~ generateVNPayUrl ~ order:", order)
-
   process.env.TZ = "Asia/Ho_Chi_Minh";
   let date = new Date();
   let createDate = moment(date).format("YYYYMMDDHHmmss");

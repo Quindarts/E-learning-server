@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import Course from "@/models/course.model";
 import HTTP_STATUS from "@/constant/HttpStatus";
 import HelperRandom from "@/helper/random";
+import User from "@/models/user.model";
+import { Review } from "@/types/review.type";
 interface RequestBody {
   name: string;
   description?: string;
@@ -70,7 +72,20 @@ export const createCourse = async (req: Request, res: Response) => {
 export const getCourseById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const course = await Course.findById(id).populate('reviews.user','name').lean();
+    const course = await Course.findById(id).lean();
+    if (!course) {
+      return Error.sendNotFound(res, "No course found");
+    }
+
+    const reviewsWithUserDetails = await Promise.all(
+      course.reviews.map(async (review: any) => {
+        const user = await User.findById(review.user).select("firstName lastName avatar");
+        return {
+          ...review,
+          user: user ? { name: user.firstName + ' ' + user.lastName, avatar: user.avatar } : null, // Gắn thông tin user vào review
+        }
+      }))
+
     if (!course) {
       return Error.sendNotFound(res, "No course found");
     }
@@ -78,7 +93,7 @@ export const getCourseById = async (req: Request, res: Response) => {
       success: true,
       status: HTTP_STATUS.OK,
       message: "Get course success !",
-      course,
+      course: { ...course, reviews: reviewsWithUserDetails },
     });
   } catch (error: any) {
     console.log("🚀 ~ getById ~ error:", error);
@@ -88,7 +103,7 @@ export const getCourseById = async (req: Request, res: Response) => {
 
 export const getAllCourses = async (req: Request, res: Response) => {
   try {
-    const course = await Course.find().lean();
+    const course = await Course.find().populate('reviews').lean();
     return res.status(HTTP_STATUS.OK).json({
       success: true,
       status: HTTP_STATUS.OK,
@@ -131,8 +146,6 @@ export const filterCourse = async (req: Request, res: Response) => {
     maxPrice,
     keywords,
   }: CourseFilterQuery = req.query;
-  console.log("hello");
-  // Tạo query mặc định để filter các courses active
   let query: any = { isActive: true };
 
   // Filter theo khoảng giá
